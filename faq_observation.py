@@ -1,10 +1,7 @@
 import os
 import json
 from rank_bm25 import BM25Okapi
-from ckip_transformers.nlp import CkipWordSegmenter
-
-# Initialize CKIP Word Segmenter
-ws_driver = CkipWordSegmenter()
+import jieba
 
 # Define a function to extract text content from FAQ data
 def extract_text(value):
@@ -16,11 +13,9 @@ def extract_text(value):
             texts.extend(item['answers'])
     return ' '.join(texts)
 
-# Use CKIP for tokenization with BM25
+# Use jieba for tokenization with BM25
 def tokenize(text):
-    # CKIP expects a list of strings for tokenization, returning a list of lists
-    tokens = ws_driver([text])[0]
-    return tokens
+    return list(jieba.cut(text))
 
 # Main program
 if __name__ == "__main__":
@@ -52,20 +47,24 @@ if __name__ == "__main__":
         # Initialize BM25 model with filtered corpus
         bm25 = BM25Okapi(tokenized_corpus)
 
-        # BM25 retrieval to find the best matching document
-        top_n = 1
-        bm25_candidates = bm25.get_top_n(tokenized_query, list(filtered_corpus.values()), n=top_n)
+        # BM25 retrieval to find the top_k matching documents
+        top_k = 5
+        bm25_candidates = bm25.get_top_n(tokenized_query, list(filtered_corpus.values()), n=top_k)
         
-        # Find the ID of the best matching document
-        best_match_id = None
-        if bm25_candidates:
-            best_match_text = bm25_candidates[0]
-            best_match_id = [key for key, value in filtered_corpus.items() if value == best_match_text][0]
+        # Find the IDs and contents of the top_k results
+        candidate_ids = [key for key, value in filtered_corpus.items() if value in bm25_candidates]
+        
+        # Print out the results for inspection
+        print(f"\nQID: {q_dict['qid']}, Query: {query}")
+        for i, (doc_id, doc_text) in enumerate(zip(candidate_ids, bm25_candidates), start=1):
+            print(f"Rank {i}: ID = {doc_id}, Content = {doc_text[:100]}...")  # Print first 100 chars of content
 
-        # Append best match to answer dictionary
-        answer_dict['answers'].append({"qid": q_dict['qid'], "retrieve": best_match_id})
+        # Append the top-1 best match ID to the answer dictionary (baseline answer)
+        if candidate_ids:
+            best_match_id = candidate_ids[0]
+            answer_dict['answers'].append({"qid": q_dict['qid'], "retrieve": best_match_id})
 
-    # Save results to JSON file
-    output_path = "dataset/preliminary/faq_pred_retrieve.json"
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(answer_dict, f, ensure_ascii=False, indent=4)
+    # # Save results to JSON file
+    # output_path = "dataset/preliminary/faq_pred_retrieve.json"
+    # with open(output_path, 'w', encoding='utf-8') as f:
+    #     json.dump(answer_dict, f, ensure_ascii=False, indent=4)
