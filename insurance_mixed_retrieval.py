@@ -35,7 +35,7 @@ os.makedirs('embeddings', exist_ok=True)
 os.makedirs('temp_texts', exist_ok=True)
 
 # 定義嵌入緩存路徑
-EMBEDDING_CACHE_PATH = 'embeddings/embedding_cache.pkl'
+EMBEDDING_CACHE_PATH = 'embeddings/insurance_embedding_cache.pkl'
 
 # 加載嵌入緩存
 if os.path.exists(EMBEDDING_CACHE_PATH):
@@ -241,7 +241,7 @@ def retrieve_and_rerank(query, embedding_retriever, bm25_retriever, model="gpt-4
 # 主程序入口
 if __name__ == "__main__":
     answer_dict = {"answers": []}
-    question_path = "dataset/preliminary/questions_example.json"
+    question_path = "dataset/preliminary/questions_preliminary.json"
     source_path = "reference"
     output_path = "dataset/preliminary/insurance_pred_retrieve.json"
 

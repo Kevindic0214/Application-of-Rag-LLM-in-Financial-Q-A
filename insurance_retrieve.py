@@ -9,7 +9,7 @@ from ckip_transformers.nlp import CkipWordSegmenter
 ws_driver = CkipWordSegmenter(model="bert-base", device=0)
 
 # Specify paths
-question_path = "dataset/preliminary/questions_example.json"
+question_path = "dataset/preliminary/questions_preliminary.json"
 source_path = "reference"
 output_path = "dataset/preliminary/insurance_pred_retrieve.json"
 

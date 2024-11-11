@@ -25,10 +25,10 @@ if __name__ == "__main__":
     answer_dict = {"answers": []}
 
     # Read question data
-    question_path = "dataset/preliminary/questions_example.json"
+    question_path = "dataset/preliminary/questions_preliminary.json"
     with open(question_path, 'r', encoding='utf-8') as f:
         qs_ref = json.load(f)
-        faq_questions = [q for q in qs_ref['questions'] if q['category'] == 'faq' and 101 <= q['qid'] <= 150]
+        faq_questions = [q for q in qs_ref['questions'] if q['category'] == 'faq' and 601 <= q['qid'] <= 900]
 
     # Read reference data and prepare corpus
     source_path = "reference/faq/pid_map_content.json"

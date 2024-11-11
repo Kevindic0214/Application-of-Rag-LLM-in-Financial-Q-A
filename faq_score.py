@@ -6,7 +6,7 @@ def calculate_precision_at_1(predicted_answers, ground_truth_answers, qid_range)
     total_count = 0
     mismatched_qids = []  # Used to record QIDs with different answers
 
-    for gt in ground_truth_answers['ground_truths']:
+    for gt in ground_truth_answers['answers']:
         qid = gt['qid']
         # Only calculate for QIDs within the specified range (FAQ range is 101 to 150)
         if qid in qid_range:
@@ -33,14 +33,14 @@ def load_json_file(file_path):
 if __name__ == "__main__":
     # Specify the file paths for predicted results and ground truth
     predicted_file_path = "dataset/preliminary/faq_pred_retrieve.json"  # JSON file for FAQ predictions
-    ground_truth_file_path = "dataset/preliminary/ground_truths_example.json"  # JSON file for FAQ ground truths
+    ground_truth_file_path = "dataset/preliminary/pred_retrieve.json"  # JSON file for FAQ ground truths
 
     # Read JSON data
     predicted_answers = load_json_file(predicted_file_path)
     ground_truth_answers = load_json_file(ground_truth_file_path)
 
     # Set the QID range for FAQ
-    faq_qid_range = range(101, 151)
+    faq_qid_range = range(601, 900)
 
     # Calculate Precision@1 for the FAQ part and get different QIDs
     avg_precision_at_1, mismatched_qids = calculate_precision_at_1(predicted_answers, ground_truth_answers, faq_qid_range)

@@ -11,7 +11,7 @@ parser = LlamaParse(
 )
 
 # 解析單個 PDF 文件
-documents = parser.load_data("./reference/finance/19.pdf")
+documents = parser.load_data("./reference/finance/1.pdf")
 
 # # 查看解析結果
 # for doc in documents:

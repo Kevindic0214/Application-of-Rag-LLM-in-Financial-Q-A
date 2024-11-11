@@ -232,7 +232,7 @@ if __name__ == "__main__":
 
     # 您可以使用 argparse 來解析命令行參數，這裡為簡化，直接定義參數
     class Args:
-        question_path = "dataset/preliminary/questions_example.json"
+        question_path = "dataset/preliminary/questions_preliminary.json"
         source_path = "reference/"
         output_path = "dataset/preliminary/insurance_pred_retrieve.json"
 
